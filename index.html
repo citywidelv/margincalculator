@@ -13,33 +13,28 @@
     --cw-white: #FFFFFF;
     --cw-teal: #0AA6A9;
     --cw-gold: #E5B423;
-    --cw-orange: #F68C28;
     --cw-light-grey: #F5F5F5;
     --cw-border: #E5E5E5;
-    --sp-xs: 4px; --sp-sm: 8px; --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px; --sp-2xl: 48px;
-    --radius: 10px;
+    --radius: 8px;
     --shadow-sm: 0 1px 3px rgba(45,42,38,0.10);
-    --shadow-md: 0 6px 18px rgba(45,42,38,0.10);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
 body {
     font-family: Verdana, 'Liberation Sans', 'DejaVu Sans', Geneva, Tahoma, sans-serif;
     background: var(--cw-light-grey);
     color: var(--cw-black);
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-/* ============ Logo bar ============ */
+/* ===== Header ===== */
 .logo-bar {
     background: var(--cw-white);
     border-bottom: 3px solid var(--cw-red);
-    padding: 12px 24px;
+    padding: 8px 20px;
 }
-.logo-bar img { height: 42px; display:block; max-width:90%; object-fit:contain; object-position:left; }
+.logo-bar img { height: 34px; display:block; max-width:80%; object-fit:contain; object-position:left; }
 
-/* ============ Hero ============ */
 .hero {
     position: relative;
     background: var(--cw-black);
@@ -50,283 +45,247 @@ body {
     content:'';
     position:absolute; inset:0;
     background: url('cw-hero.jpg') center 35% / cover no-repeat;
-    opacity: 0.28;
+    opacity: 0.25;
     filter: grayscale(100%);
 }
 .hero::after {
     content:'';
     position:absolute; inset:0;
-    background: linear-gradient(100deg, rgba(45,42,38,0.92) 25%, rgba(45,42,38,0.55) 70%, rgba(45,42,38,0.75) 100%);
+    background: linear-gradient(100deg, rgba(45,42,38,0.94) 30%, rgba(45,42,38,0.60) 100%);
 }
 .hero-inner {
     position: relative; z-index: 1;
-    max-width: 1100px; margin: 0 auto;
-    padding: 46px 24px 42px;
+    max-width: 1240px; margin: 0 auto;
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
 }
-.hero h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-}
-.hero h1 .accent { color: var(--cw-red); }
-.hero .tagline {
-    margin-top: 10px;
-    font-size: 0.95rem;
-    color: #D8D6D3;
-    max-width: 640px;
-}
-.hero .red-rule {
-    width: 64px; height: 4px; background: var(--cw-red);
-    margin-bottom: 18px;
-}
+.hero h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; }
+.hero .tagline { font-size: 0.75rem; color: #C9C7C4; margin-top: 2px; }
 
-/* ============ Layout ============ */
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 56px; }
+.region-toggle {
+    display:inline-flex;
+    border: 2px solid var(--cw-white);
+    border-radius: 999px;
+    overflow: hidden;
+    background: transparent;
+}
+.region-toggle button {
+    appearance:none; border:none; background:transparent;
+    font-family: inherit;
+    font-size: 0.78rem; font-weight: 700;
+    padding: 7px 16px;
+    cursor: pointer;
+    color: var(--cw-white);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.region-toggle button.active { background: var(--cw-white); color: var(--cw-black); }
+.region-toggle button:focus-visible { outline: 3px solid var(--cw-red); outline-offset: -3px; }
+
+/* ===== Layout ===== */
+.wrap {
+    max-width: 1240px; margin: 0 auto;
+    padding: 16px 20px 30px;
+    display: grid;
+    grid-template-columns: minmax(300px, 5fr) 7fr;
+    gap: 16px;
+    align-items: start;
+}
 .card {
     background: var(--cw-white);
     border: 1px solid var(--cw-border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
-    padding: 26px 28px;
-    margin-top: 24px;
+    padding: 16px 18px;
 }
-.card-step {
-    display:flex; align-items:baseline; gap:12px; margin-bottom: 6px;
+.card h2 {
+    font-size: 0.92rem; font-weight: 700;
+    padding-bottom: 8px; margin-bottom: 12px;
+    border-bottom: 2px solid var(--cw-red);
+    display:flex; justify-content: space-between; align-items:baseline;
 }
-.step-num {
-    background: var(--cw-red); color:#fff;
-    font-weight:700; font-size: 0.8rem;
-    border-radius: 50%;
-    width: 26px; height: 26px;
-    display:inline-flex; align-items:center; justify-content:center;
-    flex: none;
-    transform: translateY(4px);
-}
-.card h2 { font-size: 1.15rem; font-weight: 700; }
-.card .sub { color: var(--cw-grey); font-size: 0.85rem; margin-bottom: 18px; }
+.card h2 .h2-note { font-weight:400; font-size:0.7rem; color: var(--cw-grey); }
 
-/* ============ Region toggle ============ */
-.region-toggle {
-    display:inline-flex;
-    border: 2px solid var(--cw-black);
-    border-radius: 999px;
-    overflow: hidden;
-    background: var(--cw-white);
-}
-.region-toggle button {
-    appearance:none; border:none; background:transparent;
-    font-family: inherit;
-    font-size: 0.9rem; font-weight: 700;
-    padding: 10px 22px;
-    cursor: pointer;
-    color: var(--cw-black);
-    transition: background 0.15s ease, color 0.15s ease;
-}
-.region-toggle button.active { background: var(--cw-black); color: #fff; }
-.region-toggle button:focus-visible { outline: 3px solid var(--cw-red); outline-offset: -3px; }
-.region-note {
-    margin-top: 12px;
-    font-size: 0.8rem;
-    color: var(--cw-grey);
-    display:flex; align-items:flex-start; gap:8px;
-}
-.region-note .dot { width:8px; height:8px; border-radius:50%; background: var(--cw-red); flex:none; margin-top:6px; }
-
-/* ============ Selectors ============ */
-.selector-grid {
-    display:grid; grid-template-columns: 1fr 1fr; gap: 20px;
-}
-label.field-label {
-    display:block; font-weight: 700; font-size: 0.85rem;
-    margin-bottom: 8px;
-}
+/* ===== Inputs card ===== */
+label.field-label { display:block; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; }
+.sel-row { display:grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
 select {
     width: 100%;
-    padding: 12px 14px;
-    font-family: inherit; font-size: 0.95rem;
+    padding: 8px 10px;
+    font-family: inherit; font-size: 0.82rem;
     color: var(--cw-black);
-    border: 2px solid var(--cw-border);
-    border-radius: 8px;
+    border: 1.5px solid var(--cw-border);
+    border-radius: 6px;
     background: var(--cw-white);
     cursor: pointer;
 }
-select:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.12); }
+select:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.10); }
 
-/* ============ Smart inputs ============ */
-.calc-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-.calc-cell {
-    border: 2px solid var(--cw-border);
-    border-radius: var(--radius);
-    padding: 18px;
-    position: relative;
-    transition: border-color 0.15s ease, background 0.15s ease;
-    background: var(--cw-white);
-}
-.calc-cell.is-solved { background: var(--cw-light-grey); border-style: dashed; }
-.calc-cell .cell-top { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; }
-.calc-cell .cell-title { font-weight:700; font-size: 0.85rem; }
+.num-row { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
+.num-label { flex: 1 1 46%; }
+.num-label .nl-title { font-weight:700; font-size: 0.78rem; display:flex; align-items:center; gap:6px; }
+.num-label .nl-hint { font-size: 0.68rem; color: var(--cw-grey); }
 .solved-chip {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em;
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--cw-grey);
-    border: 1px solid var(--cw-border);
-    background: var(--cw-white);
+    color: var(--cw-teal);
+    border: 1px solid var(--cw-teal);
     border-radius: 999px;
-    padding: 2px 8px;
+    padding: 0px 6px;
     visibility: hidden;
 }
-.calc-cell.is-solved .solved-chip { visibility: visible; }
-.input-wrap { position: relative; }
+.num-row.is-solved .solved-chip { visibility: visible; }
+.num-row.is-solved input { background: var(--cw-light-grey); border-style: dashed; }
+.input-wrap { position: relative; flex: 1 1 54%; }
 .input-wrap .sym {
     position:absolute; top:50%; transform:translateY(-50%);
-    color: var(--cw-grey); font-weight: 700; font-size: 1rem;
+    color: var(--cw-grey); font-weight: 700; font-size: 0.85rem;
 }
-.input-wrap .sym.pre { left: 12px; }
-.input-wrap .sym.post { right: 12px; }
+.input-wrap .sym.pre { left: 10px; }
+.input-wrap .sym.post { right: 10px; }
 input[type="number"] {
     width: 100%;
     font-family: inherit;
-    font-size: 1.25rem; font-weight: 700;
+    font-size: 1rem; font-weight: 700;
     color: var(--cw-black);
-    padding: 12px 12px;
-    border: 2px solid var(--cw-border);
-    border-radius: 8px;
+    padding: 8px 10px;
+    border: 1.5px solid var(--cw-border);
+    border-radius: 6px;
     background: var(--cw-white);
+    text-align: right;
 }
-input.has-pre { padding-left: 28px; }
-input.has-post { padding-right: 30px; }
-input[type="number"]:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.12); }
+input.has-pre { padding-left: 24px; }
+input.has-post { padding-right: 26px; }
+input[type="number"]:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.10); }
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
 input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
-.calc-cell .hint { font-size: 0.75rem; color: var(--cw-grey); margin-top: 8px; }
-.smart-tip {
-    margin-top: 18px;
-    background: var(--cw-light-grey);
-    border-left: 4px solid var(--cw-red);
-    border-radius: 6px;
-    padding: 10px 14px;
-    font-size: 0.8rem;
-    color: var(--cw-grey);
-}
 
-/* ============ Barometer ============ */
-.baro-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom: 8px; }
+.smart-tip {
+    background: var(--cw-light-grey);
+    border-left: 3px solid var(--cw-red);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 0.7rem;
+    color: var(--cw-grey);
+    margin-top: 4px;
+}
+.region-note { font-size: 0.7rem; color: var(--cw-grey); margin-top: 10px; display:flex; gap:6px; }
+.region-note .dot { width:6px; height:6px; border-radius:50%; background: var(--cw-red); flex:none; margin-top:5px; }
+
+.actions { display:flex; gap: 10px; margin-top: 14px; }
+button.btn {
+    font-family: inherit;
+    font-size: 0.78rem; font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    flex: 1;
+}
+.btn-primary { background: var(--cw-red); color:#fff; }
+.btn-primary:hover { background: var(--cw-red-dark); }
+.btn-secondary { background: #fff; color: var(--cw-black); border-color: var(--cw-black); }
+.btn-secondary:hover { background: var(--cw-black); color: #fff; }
+
+/* ===== Barometer card ===== */
+.baro-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; }
 .status-pill {
-    font-weight: 700; font-size: 0.9rem;
+    font-weight: 700; font-size: 0.82rem;
     border-radius: 999px;
-    padding: 8px 18px;
-    border: 2px solid var(--cw-border);
+    padding: 6px 14px;
+    border: 1.5px solid var(--cw-border);
     color: var(--cw-grey);
     background: var(--cw-white);
 }
 .status-pill.ok    { background: #E7F6F6; color: #067d80; border-color: var(--cw-teal); }
 .status-pill.high  { background: #FBF2D3; color: #7A6013; border-color: var(--cw-gold); }
 .status-pill.low   { background: #FAE4E5; color: var(--cw-red-dark); border-color: var(--cw-red); }
-.gauge { margin: 26px 0 6px; }
+.fair-line { font-size: 0.75rem; color: var(--cw-grey); }
+.fair-line strong { color: var(--cw-black); }
+
+.gauge { margin: 22px 0 2px; }
 .gauge-track {
     position: relative;
-    height: 18px;
+    height: 14px;
     border-radius: 999px;
-    background: linear-gradient(to right, #EDEDED, #EDEDED);
-    overflow: visible;
+    background: #EDEDED;
 }
 .gauge-zone { position:absolute; top:0; bottom:0; }
 .gauge-zone.low  { left:0; background:#F3D4D6; border-radius: 999px 0 0 999px; }
 .gauge-zone.fair { background: var(--cw-teal); opacity: 0.85; }
 .gauge-zone.high { right:0; background:#F3E7C2; border-radius: 0 999px 999px 0; }
-.gauge-target {
-    position:absolute; top:-6px; bottom:-6px; width: 3px;
-    background: var(--cw-black);
-}
+.gauge-target { position:absolute; top:-5px; bottom:-5px; width: 2.5px; background: var(--cw-black); }
 .gauge-needle {
-    position:absolute; top:-10px;
+    position:absolute; top:-9px;
     width: 0; height: 0;
-    transform: translateX(-8px);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 12px solid var(--cw-red);
+    transform: translateX(-7px);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 10px solid var(--cw-red);
     transition: left 0.25s ease;
 }
 .gauge-needle::after {
-    content:''; position:absolute; left:-1.5px; top:-12px;
-    width:3px; height: 40px; background: var(--cw-red);
+    content:''; position:absolute; left:-1px; top:-10px;
+    width:2.5px; height: 32px; background: var(--cw-red);
     opacity: 0.55;
 }
-.gauge-labels { position: relative; height: 20px; margin-top: 10px; font-size: 0.72rem; color: var(--cw-grey); }
+.gauge-labels { position: relative; height: 16px; margin-top: 8px; font-size: 0.65rem; color: var(--cw-grey); }
 .gauge-labels span { position:absolute; transform: translateX(-50%); white-space: nowrap; }
-.gauge-scale { display:flex; justify-content:space-between; font-size: 0.68rem; color:#A9A9AB; margin-top: 4px; }
+.gauge-scale { display:flex; justify-content:space-between; font-size: 0.6rem; color:#A9A9AB; margin-top: 2px; }
+
 .baro-meta {
     display:grid; grid-template-columns: repeat(4, 1fr);
-    gap: 16px; margin-top: 26px;
-    border-top: 1px solid var(--cw-border);
-    padding-top: 20px;
+    gap: 10px; margin-top: 16px;
 }
-.meta-item .m-label { font-size: 0.72rem; color: var(--cw-grey); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.meta-item .m-value { font-size: 1.05rem; font-weight: 700; }
-.baro-text { margin-top: 18px; font-size: 0.9rem; color: var(--cw-black); background: var(--cw-light-grey); border-radius: 8px; padding: 14px 16px; }
+.meta-item .m-label { font-size: 0.62rem; color: var(--cw-grey); text-transform: uppercase; letter-spacing: 0.05em; }
+.meta-item .m-value { font-size: 0.92rem; font-weight: 700; }
+.baro-text {
+    margin-top: 12px; font-size: 0.78rem;
+    background: var(--cw-light-grey);
+    border-radius: 6px; padding: 10px 12px;
+}
 
-/* ============ Results ============ */
-.results-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.results-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
 .result-card {
     background: var(--cw-light-grey);
-    border-radius: var(--radius);
-    padding: 18px 14px;
+    border-radius: 6px;
+    padding: 10px 8px;
     text-align: center;
 }
-.result-label { font-size: 0.75rem; color: var(--cw-grey); margin-bottom: 6px; }
-.result-value { font-size: 1.35rem; font-weight: 700; color: var(--cw-black); }
+.result-label { font-size: 0.62rem; color: var(--cw-grey); }
+.result-value { font-size: 1rem; font-weight: 700; color: var(--cw-black); }
 
-/* ============ Formulas ============ */
-details.formulas { margin-top: 24px; }
+details.formulas { margin-top: 12px; }
 details.formulas summary {
-    cursor: pointer; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; font-weight: 700; font-size: 0.72rem;
     color: var(--cw-grey);
     list-style: none;
-    display:flex; align-items:center; gap:8px;
+    display:flex; align-items:center; gap:6px;
 }
-details.formulas summary::before { content:'+'; color: var(--cw-red); font-size: 1rem; font-weight: 700; }
+details.formulas summary::before { content:'+'; color: var(--cw-red); font-weight: 700; }
 details[open].formulas summary::before { content:'\2212'; }
 .formula-box {
-    margin-top: 12px;
+    margin-top: 8px;
     background: var(--cw-light-grey);
-    border-left: 4px solid var(--cw-grey);
-    border-radius: 6px;
-    padding: 14px 16px;
+    border-left: 3px solid var(--cw-grey);
+    border-radius: 4px;
+    padding: 10px 12px;
     font-family: 'Courier New', monospace;
-    font-size: 0.8rem;
-    line-height: 1.9;
-    color: var(--cw-black);
+    font-size: 0.7rem;
+    line-height: 1.8;
 }
 
-/* ============ Actions ============ */
-.actions { display:flex; gap: 14px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
-button.btn {
-    font-family: inherit;
-    font-size: 0.95rem; font-weight: 700;
-    padding: 13px 30px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-button.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-.btn-primary { background: var(--cw-red); color:#fff; }
-.btn-secondary { background: #fff; color: var(--cw-black); border-color: var(--cw-black); }
-
-/* ============ Footer ============ */
 footer {
     text-align:center;
-    padding: 20px 12px 26px;
-    font-size: 11px;
+    padding: 10px 12px 60px;
+    font-size: 10px;
     color: var(--cw-grey);
 }
 footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 
-@media (max-width: 900px) {
-    .calc-grid, .selector-grid { grid-template-columns: 1fr; }
+@media (max-width: 940px) {
+    .wrap { grid-template-columns: 1fr; }
     .results-grid, .baro-meta { grid-template-columns: 1fr 1fr; }
-    .hero h1 { font-size: 1.5rem; }
 }
 </style>
 </head>
@@ -338,32 +297,24 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 
 <div class="hero">
     <div class="hero-inner">
-        <div class="red-rule"></div>
-        <h1>Margin Calculator &amp; Fair Price Barometer</h1>
-        <p class="tagline">Enter any two numbers and the third solves itself. The barometer tells you if the customer's price sits inside a fair range for your market.</p>
+        <div>
+            <h1>Margin Calculator &amp; Fair Price Barometer</h1>
+            <div class="tagline">Enter any two numbers, the third solves itself. The barometer shows if the price is fair for your market.</div>
+        </div>
+        <div class="region-toggle" role="group" aria-label="Region">
+            <button type="button" id="region-lv" class="active" onclick="setRegion('lv')">Las Vegas</button>
+            <button type="button" id="region-nnv" onclick="setRegion('nnv')">Northern Nevada</button>
+        </div>
     </div>
 </div>
 
 <div class="wrap">
 
-    <!-- STEP 1: Market & service -->
+    <!-- LEFT: inputs -->
     <div class="card">
-        <div class="card-step"><span class="step-num">1</span><h2>Set the Market &amp; Service</h2></div>
-        <p class="sub">Fair ranges shift by region, service line, and project size.</p>
+        <h2>Deal Inputs <span class="h2-note">fill any two number fields</span></h2>
 
-        <div style="margin-bottom:20px;">
-            <label class="field-label" for="region-lv">Region</label>
-            <div class="region-toggle" role="group" aria-label="Region">
-                <button type="button" id="region-lv" class="active" onclick="setRegion('lv')">Las Vegas</button>
-                <button type="button" id="region-nnv" onclick="setRegion('nnv')">Northern Nevada</button>
-            </div>
-            <div class="region-note" id="region-note">
-                <span class="dot"></span>
-                <span>Las Vegas is the competitive baseline market. Deep vendor supply keeps pricing sharp.</span>
-            </div>
-        </div>
-
-        <div class="selector-grid">
+        <div class="sel-row">
             <div>
                 <label class="field-label" for="service-type">Service Category</label>
                 <select id="service-type" onchange="recalc()">
@@ -420,64 +371,60 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
                 </select>
             </div>
         </div>
-    </div>
 
-    <!-- STEP 2: Numbers -->
-    <div class="card">
-        <div class="card-step"><span class="step-num">2</span><h2>Run the Numbers</h2></div>
-        <p class="sub">Fill in any two fields. The third is solved for you automatically.</p>
-
-        <div class="calc-grid">
-            <div class="calc-cell" id="cell-vendor">
-                <div class="cell-top">
-                    <span class="cell-title">City Wide Cost to Vendor</span>
-                    <span class="solved-chip">Solved</span>
-                </div>
-                <div class="input-wrap">
-                    <span class="sym pre">$</span>
-                    <input type="number" id="vendor-cost" class="has-pre" placeholder="0.00" step="0.01" min="0" inputmode="decimal" oninput="onUserInput('vendor')">
-                </div>
-                <div class="hint">What we pay the vendor for the job</div>
+        <div class="num-row" id="cell-vendor">
+            <div class="num-label">
+                <div class="nl-title"><label for="vendor-cost">City Wide Cost to Vendor</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-hint">What we pay the vendor</div>
             </div>
-
-            <div class="calc-cell" id="cell-margin">
-                <div class="cell-top">
-                    <span class="cell-title">Margin Rate</span>
-                    <span class="solved-chip">Solved</span>
-                </div>
-                <div class="input-wrap">
-                    <input type="number" id="margin-rate" class="has-post" placeholder="40" step="0.5" min="0" max="99" inputmode="decimal" oninput="onUserInput('margin')">
-                    <span class="sym post">%</span>
-                </div>
-                <div class="hint">Margin on price, not markup on cost</div>
-            </div>
-
-            <div class="calc-cell" id="cell-customer">
-                <div class="cell-top">
-                    <span class="cell-title">City Wide Price to Customer</span>
-                    <span class="solved-chip">Solved</span>
-                </div>
-                <div class="input-wrap">
-                    <span class="sym pre">$</span>
-                    <input type="number" id="customer-price" class="has-pre" placeholder="0.00" step="0.01" min="0" inputmode="decimal" oninput="onUserInput('customer')">
-                </div>
-                <div class="hint">What the customer is quoted</div>
+            <div class="input-wrap">
+                <span class="sym pre">$</span>
+                <input type="number" id="vendor-cost" class="has-pre" placeholder="0.00" step="0.01" min="0" inputmode="decimal" oninput="onUserInput('vendor')">
             </div>
         </div>
 
-        <div class="smart-tip" id="smart-tip">
-            Margin starts at 40%, the City Wide target for Other Service Projects. Type a vendor cost to see the customer price, or type the customer's budget to work backward to a vendor number.
+        <div class="num-row" id="cell-margin">
+            <div class="num-label">
+                <div class="nl-title"><label for="margin-rate">Margin Rate</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-hint">On price, not markup on cost</div>
+            </div>
+            <div class="input-wrap">
+                <input type="number" id="margin-rate" class="has-post" placeholder="40" step="0.5" min="0" max="99" inputmode="decimal" oninput="onUserInput('margin')">
+                <span class="sym post">%</span>
+            </div>
+        </div>
+
+        <div class="num-row" id="cell-customer">
+            <div class="num-label">
+                <div class="nl-title"><label for="customer-price">City Wide Price to Customer</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-hint">What the customer is quoted</div>
+            </div>
+            <div class="input-wrap">
+                <span class="sym pre">$</span>
+                <input type="number" id="customer-price" class="has-pre" placeholder="0.00" step="0.01" min="0" inputmode="decimal" oninput="onUserInput('customer')">
+            </div>
+        </div>
+
+        <div class="smart-tip">Margin starts at 40%, the City Wide target for Other Service Projects. Type a vendor cost to see the customer price, or type the customer's budget to work backward.</div>
+
+        <div class="region-note" id="region-note">
+            <span class="dot"></span>
+            <span>Las Vegas is the competitive baseline market. Deep vendor supply keeps pricing sharp.</span>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" type="button" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn btn-secondary" type="button" onclick="resetCalculator()">Reset</button>
         </div>
     </div>
 
-    <!-- STEP 3: Barometer -->
+    <!-- RIGHT: barometer + metrics -->
     <div class="card">
-        <div class="card-step"><span class="step-num">3</span><h2>Check the Barometer</h2></div>
-        <p class="sub" id="baro-sub">Fair range for this work in Las Vegas.</p>
+        <h2>Fair Price Barometer <span class="h2-note" id="baro-sub">fair range for this work in Las Vegas</span></h2>
 
         <div class="baro-head">
             <div class="status-pill" id="status-pill">Enter numbers to check your position</div>
-            <div style="font-size:0.8rem;color:var(--cw-grey);" id="fair-price-line"></div>
+            <div class="fair-line" id="fair-price-line"></div>
         </div>
 
         <div class="gauge">
@@ -502,16 +449,11 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
         <div class="baro-text" id="recommendation-text">
             City Wide targets 32-40% margins on most work, with 40% the standard for Other Service Projects. Large projects over $10,000 can slide to 20-30% to stay competitive. 20% is the floor anywhere, in any market.
         </div>
-    </div>
 
-    <!-- STEP 4: Results -->
-    <div class="card">
-        <div class="card-step"><span class="step-num">4</span><h2>Quick Metrics</h2></div>
-        <p class="sub">The numbers your FSM or salesperson will ask about.</p>
         <div class="results-grid">
             <div class="result-card"><div class="result-label">Gross Profit</div><div class="result-value" id="gross-profit">$0.00</div></div>
             <div class="result-card"><div class="result-label">Markup on Cost</div><div class="result-value" id="markup-percent">0%</div></div>
-            <div class="result-card"><div class="result-label">Profit per $100 Billed</div><div class="result-value" id="profit-per-hundred">$0.00</div></div>
+            <div class="result-card"><div class="result-label">Profit per $100</div><div class="result-value" id="profit-per-hundred">$0.00</div></div>
             <div class="result-card"><div class="result-label">Price Multiplier</div><div class="result-value" id="multiplier">1.00x</div></div>
         </div>
 
@@ -524,11 +466,6 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
                 Margin is figured on the customer price, not on cost. A 40% margin is a 66.7% markup.
             </div>
         </details>
-
-        <div class="actions">
-            <button class="btn btn-primary" type="button" onclick="exportToCSV()">Export to CSV</button>
-            <button class="btn btn-secondary" type="button" onclick="resetCalculator()">Reset All</button>
-        </div>
     </div>
 
 </div>
@@ -683,7 +620,7 @@ function renderStatus(b, m, cost) {
 
     document.getElementById('target-range').textContent = b.min + '-' + b.max + '%';
     document.getElementById('target-pt').textContent = b.target + '%';
-    document.getElementById('baro-sub').textContent = 'Fair range for ' + svc.toLowerCase() + ' in ' + reg + (b.sizeNote ? ' (' + b.sizeNote + ')' : '') + '.';
+    document.getElementById('baro-sub').textContent = 'fair range for ' + svc.toLowerCase() + ' in ' + reg + (b.sizeNote ? ' (' + b.sizeNote + ')' : '');
 
     // Fair customer price range in dollars, when we know vendor cost
     var priceLine = document.getElementById('fair-price-line');
