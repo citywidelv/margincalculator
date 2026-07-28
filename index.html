@@ -229,8 +229,9 @@ button.btn {
     width:2.5px; height: 32px; background: var(--cw-red);
     opacity: 0.55;
 }
-.gauge-labels { position: relative; height: 16px; margin-top: 8px; font-size: 0.65rem; color: var(--cw-grey); }
+.gauge-labels { position: relative; height: 28px; margin-top: 8px; font-size: 0.65rem; color: var(--cw-grey); }
 .gauge-labels span { position:absolute; transform: translateX(-50%); white-space: nowrap; }
+.gauge-labels span.drop { top: 13px; }
 .gauge-scale { display:flex; justify-content:space-between; font-size: 0.6rem; color:#A9A9AB; margin-top: 2px; }
 
 .baro-meta {
@@ -596,10 +597,12 @@ function renderGauge(b, m) {
     document.getElementById('gauge-target').style.left = pct(b.target) + '%';
 
     var labels = document.getElementById('gauge-labels');
+    var minDrop = (b.target - b.min) <= 6 ? ' class="drop"' : '';
+    var maxDrop = (b.max - b.target) <= 6 ? ' class="drop"' : '';
     labels.innerHTML =
-        '<span style="left:' + pct(b.min) + '%">min ' + b.min + '%</span>' +
+        '<span' + minDrop + ' style="left:' + pct(b.min) + '%">min ' + b.min + '%</span>' +
         '<span style="left:' + pct(b.target) + '%;font-weight:700;color:var(--cw-black);">target ' + b.target + '%</span>' +
-        '<span style="left:' + pct(b.max) + '%">max ' + b.max + '%</span>';
+        '<span' + maxDrop + ' style="left:' + pct(b.max) + '%">max ' + b.max + '%</span>';
 
     var needle = document.getElementById('gauge-needle');
     if (m !== null && m > 0) {
