@@ -7,7 +7,7 @@
 <style>
 :root {
     --cw-red: #D22730;
-    --cw-red-dark: #A81E26;
+    --cw-red-dark: #B01F27;
     --cw-black: #2D2A26;
     --cw-grey: #636466;
     --cw-white: #FFFFFF;
@@ -289,11 +289,19 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
     .results-grid, .baro-meta { grid-template-columns: 1fr 1fr; }
 }
 </style>
+<link rel="stylesheet" href="https://citywidelv.github.io/cw-base.css">
+<script src="https://citywidelv.github.io/cw-ops-desk/cw-auth.js"></script>
+<script>/* Internal tool. One team unlock per device (cw-auth.js). No passcode box here: without a
+   saved passcode this page sends the browser to the hub gate and comes straight back. */
+(function(){ if(!window.CWAuth) return; var hub = /sales-hub/.test(document.referrer||"") ? "sales" : "ops";
+  var p = CWAuth.require({hub:hub}); if(!p){ document.documentElement.style.visibility="hidden"; return; }
+  window.addEventListener("load", function(){ CWAuth.validate(p,"auth").then(function(r){ if(r.ok===false) CWAuth.locked(hub,"Wrong passcode."); }); }); })();
+</script>
 </head>
 <body>
 
 <div class="logo-bar" style="position:relative">
-    <a href="https://citywidelv.github.io/cw-ops-desk/" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#fff;background:var(--cw-red);text-decoration:none;border-radius:16px;padding:7px 15px;box-shadow:0 2px 6px rgba(210,39,48,.3)">&#8592; Back to Ops Hub</a>
+    <a href="https://citywidelv.github.io/cw-ops-desk/" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#fff;background:var(--cw-red);text-decoration:none;border-radius:16px;padding:7px 15px;box-shadow:0 2px 6px rgba(210,39,48,.3)">&larr; Ops Hub</a>
     <img src="https://emailer.emfluence.com/clients/citywide/uploadedfiles/signature_logo.png" alt="City Wide Facility Solutions">
 </div>
 
