@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
 <title>Margin Calculator | City Wide Facility Solutions</title>
 <style>
 :root {
@@ -15,7 +16,21 @@
     --cw-gold: #E5B423;
     --cw-light-grey: #F5F5F5;
     --cw-border: #E5E5E5;
-    --radius: 8px;
+
+    /* Approval tiers. Fills match the Margin Calculator workbook. */
+    --t1-bg: #F8D7D9; --t1-bar: #D22730;   /* under 30%: DOO & GM approval */
+    --t2-bg: #FDE3CC; --t2-bar: #E58A3C;   /* 30% to 34%: DOO approval */
+    --t3-bg: #F9EDC8; --t3-bar: #E5B423;   /* 35% to 39% */
+    --t4-bg: #DCEFD9; --t4-bar: #4E9A49;   /* 40% & up */
+
+    --fs-caption: 12px;
+    --fs-ui: 13px;
+    --fs-body: 15px;
+    --fs-lead: 17px;
+    --fs-h1: 22px;
+
+    --radius: 11px;
+    --radius-ctl: 6px;
     --shadow-sm: 0 1px 3px rgba(45,42,38,0.10);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -23,7 +38,7 @@ body {
     font-family: Verdana, 'Liberation Sans', 'DejaVu Sans', Geneva, Tahoma, sans-serif;
     background: var(--cw-light-grey);
     color: var(--cw-black);
-    font-size: 13px;
+    font-size: var(--fs-ui);
     line-height: 1.5;
 }
 
@@ -31,9 +46,19 @@ body {
 .logo-bar {
     background: var(--cw-white);
     border-bottom: 3px solid var(--cw-red);
-    padding: 8px 20px;
+    padding: 8px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
-.logo-bar img { height: 34px; display:block; max-width:80%; object-fit:contain; object-position:left; }
+.logo-bar img { height: 34px; display:block; min-width:0; max-width:60%; object-fit:contain; object-position:left; }
+.hub-link {
+    flex: none;
+    font-size: var(--fs-caption); font-weight: 700;
+    color: #fff; background: var(--cw-red);
+    text-decoration: none; border-radius: 18px;
+    padding: 8px 16px; min-height: 36px;
+    display: inline-flex; align-items: center;
+    box-shadow: 0 2px 6px rgba(210,39,48,.3);
+}
 
 .hero {
     position: relative;
@@ -56,141 +81,199 @@ body {
 .hero-inner {
     position: relative; z-index: 1;
     max-width: 1240px; margin: 0 auto;
-    padding: 16px 20px;
+    padding: 16px;
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: wrap; gap: 12px;
 }
-.hero h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; }
-.hero .tagline { font-size: 0.75rem; color: #C9C7C4; margin-top: 2px; }
+.hero h1 { font-size: var(--fs-h1); font-weight: 700; line-height: 1.25; }
+.hero .tagline { font-size: var(--fs-caption); color: #C9C7C4; margin-top: 4px; }
 
 .region-toggle {
     display:inline-flex;
     border: 2px solid var(--cw-white);
     border-radius: 999px;
     overflow: hidden;
-    background: transparent;
 }
 .region-toggle button {
     appearance:none; border:none; background:transparent;
     font-family: inherit;
-    font-size: 0.78rem; font-weight: 700;
-    padding: 7px 16px;
+    font-size: var(--fs-ui); font-weight: 700;
+    padding: 8px 16px; min-height: 40px;
     cursor: pointer;
     color: var(--cw-white);
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 120ms ease-out, color 120ms ease-out;
 }
 .region-toggle button.active { background: var(--cw-white); color: var(--cw-black); }
-.region-toggle button:focus-visible { outline: 3px solid var(--cw-red); outline-offset: -3px; }
 
 /* ===== Layout ===== */
 .wrap {
     max-width: 1240px; margin: 0 auto;
-    padding: 16px 20px 30px;
+    padding: 16px 16px 32px;
     display: grid;
-    grid-template-columns: minmax(300px, 5fr) 7fr;
+    grid-template-columns: minmax(320px, 5fr) 7fr;
+    grid-template-areas: "in baro" "in ladder";
     gap: 16px;
     align-items: start;
 }
+#card-inputs { grid-area: in; position: sticky; top: 12px; }
+#card-baro   { grid-area: baro; }
+#card-ladder { grid-area: ladder; }
+
 .card {
     background: var(--cw-white);
     border: 1px solid var(--cw-border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
-    padding: 16px 18px;
+    padding: 16px;
 }
 .card h2 {
-    font-size: 0.92rem; font-weight: 700;
+    font-size: var(--fs-lead); font-weight: 700;
     padding-bottom: 8px; margin-bottom: 12px;
     border-bottom: 2px solid var(--cw-red);
-    display:flex; justify-content: space-between; align-items:baseline;
+    display:flex; justify-content: space-between; align-items:baseline; gap: 8px; flex-wrap: wrap;
 }
-.card h2 .h2-note { font-weight:400; font-size:0.7rem; color: var(--cw-grey); }
+.card h2 .h2-note { font-weight:400; font-size: var(--fs-caption); color: var(--cw-grey); }
 
 /* ===== Inputs card ===== */
-label.field-label { display:block; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; }
-.sel-row { display:grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+label.field-label { display:block; font-weight: 700; font-size: var(--fs-ui); margin-bottom: 4px; }
+.sel-row { display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
 select {
     width: 100%;
-    padding: 8px 10px;
-    font-family: inherit; font-size: 0.82rem;
+    padding: 8px 12px; min-height: 44px;
+    font-family: inherit; font-size: var(--fs-ui);
     color: var(--cw-black);
     border: 1.5px solid var(--cw-border);
-    border-radius: 6px;
+    border-radius: var(--radius-ctl);
     background: var(--cw-white);
     cursor: pointer;
 }
-select:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.10); }
+select:focus { border-color: var(--cw-red); }
 
-.num-row { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
-.num-label { flex: 1 1 46%; }
-.num-label .nl-title { font-weight:700; font-size: 0.78rem; display:flex; align-items:center; gap:6px; }
-.num-label .nl-hint { font-size: 0.68rem; color: var(--cw-grey); }
+.num-row { display:flex; align-items:center; gap:12px; margin-bottom: 12px; }
+.num-label { flex: 1 1 46%; min-width: 0; }
+.num-label .nl-title { font-weight:700; font-size: var(--fs-ui); display:flex; align-items:center; gap:8px; flex-wrap: wrap; }
+.num-label .nl-hint { font-size: var(--fs-caption); color: var(--cw-grey); }
 .solved-chip {
-    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em;
+    font-size: var(--fs-caption); font-weight: 700; letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--cw-teal);
     border: 1px solid var(--cw-teal);
     border-radius: 999px;
-    padding: 0px 6px;
-    visibility: hidden;
+    padding: 0 8px;
+    display: none;
 }
-.num-row.is-solved .solved-chip { visibility: visible; }
+.num-row.is-solved .solved-chip { display: inline-block; }
 .num-row.is-solved input { background: var(--cw-light-grey); border-style: dashed; }
 .input-wrap { position: relative; flex: 1 1 54%; }
 .input-wrap .sym {
     position:absolute; top:50%; transform:translateY(-50%);
-    color: var(--cw-grey); font-weight: 700; font-size: 0.85rem;
+    color: var(--cw-grey); font-weight: 700; font-size: var(--fs-body);
+    pointer-events: none;
 }
-.input-wrap .sym.pre { left: 10px; }
-.input-wrap .sym.post { right: 10px; }
+.input-wrap .sym.pre { left: 12px; }
+.input-wrap .sym.post { right: 12px; }
 input[type="number"] {
     width: 100%;
     font-family: inherit;
-    font-size: 1rem; font-weight: 700;
+    font-size: 17px; font-weight: 700;
     color: var(--cw-black);
-    padding: 8px 10px;
+    padding: 8px 12px; min-height: 46px;
     border: 1.5px solid var(--cw-border);
-    border-radius: 6px;
+    border-radius: var(--radius-ctl);
     background: var(--cw-white);
     text-align: right;
 }
-input.has-pre { padding-left: 24px; }
-input.has-post { padding-right: 26px; }
-input[type="number"]:focus { outline:none; border-color: var(--cw-red); box-shadow: 0 0 0 3px rgba(210,39,48,0.10); }
+input.has-pre { padding-left: 28px; }
+input.has-post { padding-right: 30px; }
+input[type="number"]:focus { border-color: var(--cw-red); }
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
 input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 
-.smart-tip {
-    background: var(--cw-light-grey);
-    border-left: 3px solid var(--cw-red);
-    border-radius: 4px;
-    padding: 8px 10px;
-    font-size: 0.7rem;
-    color: var(--cw-grey);
-    margin-top: 4px;
+/* Margin slider: the track is the approval thermometer, 20% to 60% */
+.slider-row { margin: -4px 0 16px; }
+input[type="range"].m-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 36px; background: transparent; cursor: pointer;
+    touch-action: pan-y;
 }
-.region-note { font-size: 0.7rem; color: var(--cw-grey); margin-top: 10px; display:flex; gap:6px; }
-.region-note .dot { width:6px; height:6px; border-radius:50%; background: var(--cw-red); flex:none; margin-top:5px; }
+.m-slider::-webkit-slider-runnable-track {
+    height: 10px; border-radius: 999px;
+    background: linear-gradient(90deg,
+        var(--t1-bar) 0%, var(--t1-bar) 25%,
+        var(--t2-bar) 25%, var(--t2-bar) 37.5%,
+        var(--t3-bar) 37.5%, var(--t3-bar) 50%,
+        var(--t4-bar) 50%, var(--t4-bar) 100%);
+}
+.m-slider::-moz-range-track {
+    height: 10px; border-radius: 999px;
+    background: linear-gradient(90deg,
+        var(--t1-bar) 0%, var(--t1-bar) 25%,
+        var(--t2-bar) 25%, var(--t2-bar) 37.5%,
+        var(--t3-bar) 37.5%, var(--t3-bar) 50%,
+        var(--t4-bar) 50%, var(--t4-bar) 100%);
+}
+.m-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 28px; height: 28px; margin-top: -9px; border-radius: 50%;
+    background: var(--cw-white); border: 3px solid var(--cw-black);
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.m-slider::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--cw-white); border: 3px solid var(--cw-black);
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.slider-scale { position: relative; height: 18px; font-size: var(--fs-caption); color: var(--cw-grey); margin: -4px 14px 0; }
+.slider-scale span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 
-.actions { display:flex; gap: 10px; margin-top: 14px; }
+/* Approval banner */
+.appr {
+    border-radius: var(--radius-ctl);
+    border-left: 6px solid var(--cw-grey);
+    background: var(--cw-light-grey);
+    padding: 12px;
+    margin-bottom: 12px;
+}
+.appr .a-title { font-size: var(--fs-lead); font-weight: 700; line-height: 1.25; }
+.appr .a-sub { font-size: var(--fs-caption); color: var(--cw-black); margin-top: 2px; }
+.appr.t1 { background: var(--t1-bg); border-left-color: var(--t1-bar); }
+.appr.t2 { background: var(--t2-bg); border-left-color: var(--t2-bar); }
+.appr.t3 { background: var(--t3-bg); border-left-color: var(--t3-bar); }
+.appr.t4 { background: var(--t4-bg); border-left-color: var(--t4-bar); }
+.hints { list-style: none; margin-top: 8px; display: grid; gap: 4px; }
+.hints li { font-size: var(--fs-caption); display:flex; justify-content: space-between; gap: 8px; }
+.hints li b { white-space: nowrap; }
+
+.region-note { font-size: var(--fs-caption); color: var(--cw-grey); margin-top: 12px; display:flex; gap:8px; }
+.region-note .dot { width:6px; height:6px; border-radius:50%; background: var(--cw-red); flex:none; margin-top:6px; }
+
+.actions { display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+#cwSaveBar { display:flex; }
+#cwSaveBar .btn { width: 100%; }
+.actions .btn { padding: 8px; }
 button.btn {
     font-family: inherit;
-    font-size: 0.78rem; font-weight: 700;
-    padding: 9px 16px;
-    border-radius: 6px;
+    font-size: var(--fs-ui); font-weight: 700;
+    padding: 8px 16px; min-height: 44px;
+    border-radius: var(--radius-ctl);
     cursor: pointer;
     border: 1.5px solid transparent;
     flex: 1;
+    transition: transform 90ms ease-out, background 120ms ease-out, color 120ms ease-out;
 }
+button.btn:active { transform: scale(.97); }
 .btn-primary { background: var(--cw-red); color:#fff; }
-.btn-primary:hover { background: var(--cw-red-dark); }
-.btn-secondary { background: #fff; color: var(--cw-black); border-color: var(--cw-black); }
-.btn-secondary:hover { background: var(--cw-black); color: #fff; }
+button.btn-secondary { background: #fff; color: var(--cw-black); border-color: var(--cw-black); }
+@media (hover:hover) {
+    .btn-primary:hover { background: var(--cw-red-dark); }
+    button.btn-secondary:hover { background: var(--cw-black); color: #fff; }
+    .lrow:hover { filter: brightness(0.97); }
+}
 
 /* ===== Barometer card ===== */
 .baro-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; }
 .status-pill {
-    font-weight: 700; font-size: 0.82rem;
+    font-weight: 700; font-size: var(--fs-ui);
     border-radius: 999px;
     padding: 6px 14px;
     border: 1.5px solid var(--cw-border);
@@ -200,10 +283,10 @@ button.btn {
 .status-pill.ok    { background: #E7F6F6; color: #067d80; border-color: var(--cw-teal); }
 .status-pill.high  { background: #FBF2D3; color: #7A6013; border-color: var(--cw-gold); }
 .status-pill.low   { background: #FAE4E5; color: var(--cw-red-dark); border-color: var(--cw-red); }
-.fair-line { font-size: 0.75rem; color: var(--cw-grey); }
+.fair-line { font-size: var(--fs-caption); color: var(--cw-grey); }
 .fair-line strong { color: var(--cw-black); }
 
-.gauge { margin: 22px 0 2px; }
+.gauge { margin: 24px 0 4px; }
 .gauge-track {
     position: relative;
     height: 14px;
@@ -222,47 +305,48 @@ button.btn {
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     border-top: 10px solid var(--cw-red);
-    transition: left 0.25s ease;
+    transition: left 0.2s ease-out;
 }
 .gauge-needle::after {
     content:''; position:absolute; left:-1px; top:-10px;
     width:2.5px; height: 32px; background: var(--cw-red);
     opacity: 0.55;
 }
-.gauge-labels { position: relative; height: 28px; margin-top: 8px; font-size: 0.65rem; color: var(--cw-grey); }
+.gauge-labels { position: relative; height: 32px; margin-top: 8px; font-size: var(--fs-caption); color: var(--cw-grey); }
 .gauge-labels span { position:absolute; transform: translateX(-50%); white-space: nowrap; }
-.gauge-labels span.drop { top: 13px; }
-.gauge-scale { display:flex; justify-content:space-between; font-size: 0.6rem; color:#A9A9AB; margin-top: 2px; }
+.gauge-labels span.drop { top: 15px; }
+.gauge-scale { display:flex; justify-content:space-between; font-size: var(--fs-caption); color:#8E8E90; margin-top: 2px; }
 
 .baro-meta {
     display:grid; grid-template-columns: repeat(4, 1fr);
-    gap: 10px; margin-top: 16px;
+    gap: 12px; margin-top: 16px;
 }
-.meta-item .m-label { font-size: 0.62rem; color: var(--cw-grey); text-transform: uppercase; letter-spacing: 0.05em; }
-.meta-item .m-value { font-size: 0.92rem; font-weight: 700; }
+.meta-item .m-label { font-size: var(--fs-caption); color: var(--cw-grey); text-transform: uppercase; letter-spacing: 0.05em; }
+.meta-item .m-value { font-size: var(--fs-body); font-weight: 700; }
 .baro-text {
-    margin-top: 12px; font-size: 0.78rem;
+    margin-top: 12px; font-size: var(--fs-ui);
     background: var(--cw-light-grey);
-    border-radius: 6px; padding: 10px 12px;
+    border-radius: var(--radius-ctl); padding: 12px;
 }
 
-.results-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+.results-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
 .result-card {
     background: var(--cw-light-grey);
-    border-radius: 6px;
-    padding: 10px 8px;
+    border-radius: var(--radius-ctl);
+    padding: 12px 8px;
     text-align: center;
 }
-.result-label { font-size: 0.62rem; color: var(--cw-grey); }
-.result-value { font-size: 1rem; font-weight: 700; color: var(--cw-black); }
+.result-label { font-size: var(--fs-caption); color: var(--cw-grey); }
+.result-value { font-size: var(--fs-body); font-weight: 700; color: var(--cw-black); }
 
 details.formulas { margin-top: 12px; }
 details.formulas summary {
-    cursor: pointer; font-weight: 700; font-size: 0.72rem;
+    cursor: pointer; font-weight: 700; font-size: var(--fs-ui);
     color: var(--cw-grey);
-    list-style: none;
-    display:flex; align-items:center; gap:6px;
+    list-style: none; min-height: 36px;
+    display:flex; align-items:center; gap:8px;
 }
+details.formulas summary::-webkit-details-marker { display:none; }
 details.formulas summary::before { content:'+'; color: var(--cw-red); font-weight: 700; }
 details[open].formulas summary::before { content:'\2212'; }
 .formula-box {
@@ -270,23 +354,98 @@ details[open].formulas summary::before { content:'\2212'; }
     background: var(--cw-light-grey);
     border-left: 3px solid var(--cw-grey);
     border-radius: 4px;
-    padding: 10px 12px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.7rem;
+    padding: 12px;
+    font-size: var(--fs-caption);
     line-height: 1.8;
+}
+
+/* ===== Margin ladder ===== */
+.hold-row { display:flex; align-items:center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.hold-row .h-label { font-size: var(--fs-caption); color: var(--cw-grey); font-weight: 700; }
+.seg { display:inline-flex; border: 1.5px solid var(--cw-black); border-radius: 999px; overflow: hidden; }
+.seg button {
+    appearance:none; border:none; background:#fff; color: var(--cw-black);
+    font-family: inherit; font-size: var(--fs-ui); font-weight: 700;
+    padding: 8px 14px; min-height: 40px; cursor: pointer;
+    transition: background 120ms ease-out, color 120ms ease-out;
+}
+.seg button.active { background: var(--cw-black); color: #fff; }
+.ladder-help { font-size: var(--fs-caption); color: var(--cw-grey); margin-bottom: 12px; }
+
+.ladder { border: 1px solid var(--cw-border); border-radius: var(--radius-ctl); overflow: hidden; }
+.lgrid { display:grid; grid-template-columns: 64px 64px 1fr 1fr; align-items: center; }
+.lcols {
+    background: var(--cw-black); color: #fff;
+    font-size: var(--fs-caption); font-weight: 700;
+    position: sticky; top: 0; z-index: 2;
+}
+.lcols span { padding: 8px; }
+.lcols span:nth-child(n+3), .lrow span:nth-child(n+3) { text-align: right; }
+.lhead {
+    display:flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    padding: 8px 8px 8px 12px;
+    font-size: var(--fs-caption); text-transform: uppercase; letter-spacing: 0.06em;
+    border-left: 6px solid; border-top: 1px solid rgba(45,42,38,.12);
+}
+.lhead b { font-size: var(--fs-caption); }
+.lhead span { text-transform: none; letter-spacing: 0; color: var(--cw-black); }
+.lrow {
+    border-left: 6px solid; border-top: 1px solid rgba(255,255,255,.7);
+    min-height: 44px; cursor: pointer;
+    font-size: var(--fs-ui); font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;
+}
+.lrow span { padding: 10px 8px; }
+.lrow span:first-child { font-weight: 700; padding-left: 6px; }
+.lrow .c-v { font-weight: 700; }
+.lrow .c-d { color: var(--cw-grey); }
+.lrow:active { filter: brightness(0.94); }
+.t1 { background: var(--t1-bg); border-left-color: var(--t1-bar); }
+.t2 { background: var(--t2-bg); border-left-color: var(--t2-bar); }
+.t3 { background: var(--t3-bg); border-left-color: var(--t3-bar); }
+.t4 { background: var(--t4-bg); border-left-color: var(--t4-bar); }
+.lrow.cur {
+    background: var(--cw-white);
+    box-shadow: inset 0 0 0 2px var(--cw-black);
+    font-size: var(--fs-body);
+    position: relative; z-index: 1;
+}
+.lrow.cur .c-d { color: var(--cw-black); font-weight: 700; }
+.now-tag {
+    display:inline-block; margin-left: 4px;
+    font-size: var(--fs-caption); font-weight: 700; letter-spacing: .06em;
+    background: var(--cw-red); color: #fff; border-radius: 999px; padding: 2px 8px;
+    vertical-align: middle;
 }
 
 footer {
     text-align:center;
-    padding: 10px 12px 60px;
-    font-size: 10px;
+    padding: 12px 12px 32px;
+    font-size: var(--fs-caption);
     color: var(--cw-grey);
 }
 footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 
 @media (max-width: 940px) {
-    .wrap { grid-template-columns: 1fr; }
+    .wrap { grid-template-columns: 1fr; grid-template-areas: "in" "baro" "ladder"; }
+    #card-inputs { position: static; }
     .results-grid, .baro-meta { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+    :root { --fs-h1: 19px; }
+    .wrap { padding: 12px 12px 32px; gap: 12px; }
+    .hero-inner { padding: 12px; }
+    .region-toggle { width: 100%; }
+    .region-toggle button { flex: 1; }
+    .card { padding: 12px; }
+    input, select, textarea { font-size: 16px; }
+    input[type="number"] { font-size: 17px; }
+    .num-row { gap: 8px; }
+    .lgrid { grid-template-columns: 56px 54px 1fr 1fr; }
+    .lrow span, .lcols span { padding-left: 6px; padding-right: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .gauge-needle { transition: none; }
 }
 </style>
 <link rel="stylesheet" href="https://citywidelv.github.io/cw-base.css">
@@ -300,16 +459,16 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 </head>
 <body>
 
-<div class="logo-bar" style="position:relative">
-    <a href="https://citywidelv.github.io/cw-ops-desk/" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#fff;background:var(--cw-red);text-decoration:none;border-radius:16px;padding:7px 15px;box-shadow:0 2px 6px rgba(210,39,48,.3)">&larr; Ops Hub</a>
+<div class="logo-bar">
     <img src="https://emailer.emfluence.com/clients/citywide/uploadedfiles/signature_logo.png" alt="City Wide Facility Solutions">
+    <a class="hub-link" href="https://citywidelv.github.io/cw-ops-desk/">&larr; Ops Hub</a>
 </div>
 
 <div class="hero">
     <div class="hero-inner">
         <div>
-            <h1>Margin Calculator &amp; Fair Price Barometer</h1>
-            <div class="tagline">Enter any two numbers, the third solves itself. The barometer shows if the price is fair for your market.</div>
+            <h1>Margin Calculator</h1>
+            <div class="tagline">Enter the IC pay or the sell price. Move the margin and watch the approval level and the dollars change.</div>
         </div>
         <div class="region-toggle" role="group" aria-label="Region">
             <button type="button" id="region-lv" class="active" onclick="setRegion('lv')">Las Vegas</button>
@@ -318,11 +477,11 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
     </div>
 </div>
 
-<div class="wrap">
+<main class="wrap">
 
-    <!-- LEFT: inputs -->
-    <div class="card">
-        <h2>Deal Inputs <span class="h2-note">fill any two number fields</span></h2>
+    <!-- Inputs + approval -->
+    <section class="card" id="card-inputs">
+        <h2>Deal Inputs <span class="h2-note">fill any two</span></h2>
 
         <div class="sel-row">
             <div>
@@ -384,8 +543,8 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 
         <div class="num-row" id="cell-vendor">
             <div class="num-label">
-                <div class="nl-title"><label for="vendor-cost">City Wide Cost to Vendor</label> <span class="solved-chip">Solved</span></div>
-                <div class="nl-hint">What we pay the vendor</div>
+                <div class="nl-title"><label for="vendor-cost">IC Pay</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-hint">What the IC is paid</div>
             </div>
             <div class="input-wrap">
                 <span class="sym pre">$</span>
@@ -395,18 +554,22 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
 
         <div class="num-row" id="cell-margin">
             <div class="num-label">
-                <div class="nl-title"><label for="margin-rate">Margin Rate</label> <span class="solved-chip">Solved</span></div>
-                <div class="nl-hint">On price, not markup on cost</div>
+                <div class="nl-title"><label for="margin-rate">Margin</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-hint">On sell price, not markup</div>
             </div>
             <div class="input-wrap">
                 <input type="number" id="margin-rate" class="has-post" placeholder="40" step="0.5" min="0" max="99" inputmode="decimal" oninput="onUserInput('margin')">
                 <span class="sym post">%</span>
             </div>
         </div>
+        <div class="slider-row" data-nosave>
+            <input type="range" class="m-slider" id="margin-slider" min="20" max="60" step="0.5" value="40" aria-label="Adjust margin" oninput="onSlider(this.value)">
+            <div class="slider-scale"><span style="left:0">20%</span><span style="left:25%">30%</span><span style="left:37.5%">35%</span><span style="left:50%">40%</span><span style="left:75%">50%</span><span style="left:100%">60%</span></div>
+        </div>
 
         <div class="num-row" id="cell-customer">
             <div class="num-label">
-                <div class="nl-title"><label for="customer-price">City Wide Price to Customer</label> <span class="solved-chip">Solved</span></div>
+                <div class="nl-title"><label for="customer-price">Sell Price</label> <span class="solved-chip">Solved</span></div>
                 <div class="nl-hint">What the customer is quoted</div>
             </div>
             <div class="input-wrap">
@@ -415,21 +578,26 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
             </div>
         </div>
 
-        <div class="smart-tip">Margin starts at 40%, the City Wide target for Other Service Projects. Type a vendor cost to see the customer price, or type the customer's budget to work backward.</div>
+        <div class="appr" id="appr" aria-live="polite" data-nosave>
+            <div class="a-title" id="appr-title">Enter a margin</div>
+            <div class="a-sub" id="appr-sub"></div>
+            <ul class="hints" id="appr-hints"></ul>
+        </div>
+
+        <div class="actions">
+            <span id="cwSaveBar"><button id="cwSaveBtn" class="btn btn-primary" type="button">Save Results</button></span>
+            <button class="btn btn-secondary" type="button" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn btn-secondary" type="button" onclick="resetCalculator()">Reset</button>
+        </div>
 
         <div class="region-note" id="region-note">
             <span class="dot"></span>
             <span>Las Vegas is the competitive baseline market. Deep vendor supply keeps pricing sharp.</span>
         </div>
+    </section>
 
-        <div class="actions">
-            <button class="btn btn-primary" type="button" onclick="exportToCSV()">Export CSV</button>
-            <button class="btn btn-secondary" type="button" onclick="resetCalculator()">Reset</button>
-        </div>
-    </div>
-
-    <!-- RIGHT: barometer + metrics -->
-    <div class="card">
+    <!-- Fair price barometer -->
+    <section class="card" id="card-baro">
         <h2>Fair Price Barometer <span class="h2-note" id="baro-sub">fair range for this work in Las Vegas</span></h2>
 
         <div class="baro-head">
@@ -446,7 +614,7 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
                 <div class="gauge-needle" id="gauge-needle" style="display:none;"></div>
             </div>
             <div class="gauge-labels" id="gauge-labels"></div>
-            <div class="gauge-scale"><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span><span>60%</span></div>
+            <div class="gauge-scale" data-nosave><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span><span>60%</span></div>
         </div>
 
         <div class="baro-meta">
@@ -470,21 +638,35 @@ footer a { color: var(--cw-red); font-weight: 700; text-decoration: none; }
         <details class="formulas">
             <summary>How the math works</summary>
             <div class="formula-box">
-                Customer Price = Vendor Cost &divide; (1 - Margin)&nbsp;&nbsp;&nbsp;$1,000 &divide; 0.60 = $1,666.67 at 40%<br>
-                Vendor Cost = Customer Price &times; (1 - Margin)&nbsp;&nbsp;&nbsp;$1,666.67 &times; 0.60 = $1,000.00<br>
-                Margin = (Price - Cost) &divide; Price&nbsp;&nbsp;&nbsp;($1,666.67 - $1,000) &divide; $1,666.67 = 40%<br>
-                Margin is figured on the customer price, not on cost. A 40% margin is a 66.7% markup.
+                Sell Price = IC Pay &divide; (1 - Margin). $1,000 &divide; 0.60 = $1,666.67 at 40%<br>
+                IC Pay = Sell Price &times; (1 - Margin). $1,666.67 &times; 0.60 = $1,000.00<br>
+                Margin = (Sell Price - IC Pay) &divide; Sell Price. ($1,666.67 - $1,000) &divide; $1,666.67 = 40%<br>
+                Margin is figured on the sell price, not on cost. A 40% margin is a 66.7% markup.
             </div>
         </details>
-    </div>
+    </section>
 
-</div>
+    <!-- Margin ladder (the workbook's two tables) -->
+    <section class="card" id="card-ladder" data-nosave>
+        <h2>Margin Ladder <span class="h2-note">tap a row to set that margin</span></h2>
+        <div class="hold-row">
+            <span class="h-label">I know the</span>
+            <div class="seg" role="group" aria-label="Which number stays fixed">
+                <button type="button" id="hold-ic" class="active" onclick="setHold('ic')">IC Pay</button>
+                <button type="button" id="hold-sell" onclick="setHold('sell')">Sell Price</button>
+            </div>
+        </div>
+        <div class="ladder-help" id="ladder-help">Enter the IC pay to see the sell price at every margin.</div>
+        <div class="ladder" id="ladder"></div>
+    </section>
+
+</main>
 
 <footer>City Wide Facility Solutions | <a href="https://www.gocitywide.com">GoCityWide.com</a></footer>
 
 <script>
 // ================= CONFIG =================
-// Per-service fair margin bands (percent margin on customer price), Las Vegas baseline.
+// Per-service fair margin bands (percent margin on sell price), Las Vegas baseline.
 var serviceMargins = {
     'floor-care':          { min: 35, target: 40, max: 45 },
     'carpet-cleaning':     { min: 35, target: 40, max: 45 },
@@ -517,29 +699,71 @@ var serviceMargins = {
 };
 var GENERIC_BAND = { min: 32, target: 40, max: 45 };  // when no service selected
 var FLOOR = 20;            // absolute company minimum margin, any market
-var NNV_SHIFT = 4;         // Northern Nevada: thinner vendor supply and less competition support
-                           // fair ranges roughly +4 points vs the Las Vegas baseline
+var NNV_SHIFT = 4;         // Northern Nevada fair ranges run about +4 points vs Las Vegas
 var GAUGE_MAX = 60;        // gauge runs 0-60% margin
 var region = 'lv';
 
+// Approval tiers, from the Margin Calculator workbook. Same in both markets.
+var TIERS = [
+    { cls:'t1', lo: -Infinity, hi: 30, action: 'DOO & GM approval required', range: '29% & under' },
+    { cls:'t2', lo: 30, hi: 35,       action: 'DOO approval required',      range: '30% to 34%' },
+    { cls:'t3', lo: 35, hi: 40,       action: 'No approval needed',         range: '35% to 39%' },
+    { cls:'t4', lo: 40, hi: Infinity, action: 'No approval needed',         range: '40% & up' }
+];
+var LADDER_MIN = 25, LADDER_MAX = 50;   // same rows as the workbook
+
 var REGION_NOTES = {
     lv:  'Las Vegas is the competitive baseline market. Deep vendor supply keeps pricing sharp.',
-    nnv: 'Northern Nevada (Reno/Sparks) runs about +' + NNV_SHIFT + ' points on margin. Thinner vendor supply and less competition support stronger pricing.'
+    nnv: 'Northern Nevada (Reno/Sparks) runs about +' + NNV_SHIFT + ' points on the fair range. Thinner vendor supply and less competition support stronger pricing. Approval levels are the same in both markets.'
 };
 
 // ================= SMART SOLVE =================
-// The two most recently user-edited fields drive the third.
-var editOrder = ['margin'];   // default 40% margin counts as an initial user choice
+// The two most recently entered fields drive the third.
+// "hold" is the dollar figure that stays fixed when the margin moves.
+var editOrder = ['margin'];
+var hold = 'ic';
+function holdField() { return hold === 'ic' ? 'vendor' : 'customer'; }
 
 function onUserInput(field) {
-    editOrder = editOrder.filter(function(f){ return f !== field; });
-    editOrder.push(field);
-    if (editOrder.length > 2) editOrder = editOrder.slice(-2);
+    if (field === 'vendor' || field === 'customer') {
+        var other = field === 'vendor' ? 'customer' : 'vendor';
+        if (editOrder.indexOf(other) < 0) setHoldUI(field === 'vendor' ? 'ic' : 'sell');
+        editOrder = editOrder.filter(function(f){ return f !== field; });
+        editOrder.push(field);
+        if (editOrder.length > 2) editOrder = editOrder.slice(-2);
+    } else {
+        // Moving the margin keeps the held dollar figure and solves the other one.
+        editOrder = [holdField(), 'margin'];
+    }
+    recalc();
+}
+
+function onSlider(v) {
+    document.getElementById('margin-rate').value = trimNum(parseFloat(v));
+    onUserInput('margin');
+}
+
+function setMargin(m) {
+    document.getElementById('margin-rate').value = trimNum(m);
+    onUserInput('margin');
+}
+
+function setHoldUI(h) {
+    hold = h;
+    document.getElementById('hold-ic').classList.toggle('active', h === 'ic');
+    document.getElementById('hold-sell').classList.toggle('active', h === 'sell');
+}
+function setHold(h) {
+    setHoldUI(h);
+    if (val('margin-rate') !== null && val(holdField() === 'vendor' ? 'vendor-cost' : 'customer-price') !== null) {
+        editOrder = [holdField(), 'margin'];
+    }
     recalc();
 }
 
 function val(id) { var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; }
 function setVal(id, v, dec) { document.getElementById(id).value = v.toFixed(dec); }
+function trimNum(n) { return String(Math.round(n * 100) / 100); }
 
 function solve() {
     var cost = val('vendor-cost'), m = val('margin-rate'), price = val('customer-price');
@@ -551,12 +775,11 @@ function solve() {
     } else if (known.indexOf('customer') >= 0 && known.indexOf('margin') >= 0 && price !== null && m !== null) {
         setVal('vendor-cost', price * (1 - m/100), 2); solved = 'vendor';
     } else if (known.indexOf('vendor') >= 0 && known.indexOf('customer') >= 0 && cost !== null && price !== null && price > 0) {
-        setVal('margin-rate', ((price - cost) / price) * 100, 1); solved = 'margin';
+        setVal('margin-rate', ((price - cost) / price) * 100, 2); solved = 'margin';
     }
 
     ['vendor','margin','customer'].forEach(function(f){
-        var cell = document.getElementById('cell-' + f);
-        if (f === solved) cell.classList.add('is-solved'); else cell.classList.remove('is-solved');
+        document.getElementById('cell-' + f).classList.toggle('is-solved', f === solved);
     });
 }
 
@@ -568,7 +791,6 @@ function currentBand() {
     var base = svc ? serviceMargins[svc] : GENERIC_BAND;
     var b = { min: base.min, target: base.target, max: base.max, sizeNote: '' };
 
-    // Size adjustments (original City Wide rules preserved)
     if (size === 'enterprise' && price > 10000) {
         b.min = Math.max(20, base.min - 10);
         b.target = Math.max(25, base.target - 10);
@@ -578,12 +800,14 @@ function currentBand() {
         b.min = base.min - 3; b.target = base.target - 3; b.max = base.max - 3;
         b.sizeNote = 'large project adjustment (-3 pts)';
     }
-
-    // Regional barometer
-    if (region === 'nnv') {
-        b.min += NNV_SHIFT; b.target += NNV_SHIFT; b.max += NNV_SHIFT;
-    }
+    if (region === 'nnv') { b.min += NNV_SHIFT; b.target += NNV_SHIFT; b.max += NNV_SHIFT; }
     return b;
+}
+
+function tierFor(m) {
+    var r = Math.round(m * 100) / 100;
+    for (var i = 0; i < TIERS.length; i++) if (r >= TIERS[i].lo && r < TIERS[i].hi) return TIERS[i];
+    return TIERS[TIERS.length - 1];
 }
 
 function serviceLabel() {
@@ -592,8 +816,96 @@ function serviceLabel() {
 }
 function regionLabel() { return region === 'nnv' ? 'Northern Nevada' : 'Las Vegas'; }
 function fmt$(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmtDelta(n) {
+    if (Math.abs(n) < 0.005) return '$0.00';
+    return (n > 0 ? '+' : '−') + fmt$(Math.abs(n));
+}
 
-// ================= RENDER =================
+// The fixed dollar figure and what it implies at any margin.
+function anchor() {
+    var a = hold === 'ic' ? val('vendor-cost') : val('customer-price');
+    return (a !== null && a > 0) ? a : null;
+}
+function figureAt(m) {          // the moving dollar figure at margin m
+    var a = anchor(); if (a === null || m >= 100) return null;
+    return hold === 'ic' ? a / (1 - m/100) : a * (1 - m/100);
+}
+
+// ================= RENDER: approval =================
+function renderApproval(m) {
+    var box = document.getElementById('appr');
+    var title = document.getElementById('appr-title');
+    var sub = document.getElementById('appr-sub');
+    var hints = document.getElementById('appr-hints');
+    hints.innerHTML = '';
+    if (m === null) {
+        box.className = 'appr'; title.textContent = 'Enter a margin'; sub.textContent = ''; return;
+    }
+    var t = tierFor(m);
+    box.className = 'appr ' + t.cls;
+    title.textContent = t.action;
+    sub.textContent = trimNum(m) + '% margin. Tier: ' + t.range + '.';
+
+    var cur = figureAt(m);
+    var steps = [
+        { at: 30, text: 'Get to 30% (DOO only)' },
+        { at: 35, text: 'Get to 35% (no approval)' },
+        { at: 40, text: 'Get to 40%' }
+    ].filter(function(s){ return Math.round(m * 100) / 100 < s.at; });
+
+    if (!steps.length) {
+        hints.innerHTML = '<li><span>At or above 40%.</span></li>';
+        return;
+    }
+    if (cur === null) {
+        hints.innerHTML = '<li><span>Enter the ' + (hold === 'ic' ? 'IC pay' : 'sell price') + ' to see what each step costs in dollars.</span></li>';
+        return;
+    }
+    var what = hold === 'ic' ? 'sell price' : 'IC pay';
+    hints.innerHTML = steps.map(function(s){
+        return '<li><span>' + s.text + ', ' + what + '</span><b>' + fmtDelta(figureAt(s.at) - cur) + '</b></li>';
+    }).join('');
+}
+
+// ================= RENDER: ladder =================
+function renderLadder(m) {
+    var a = anchor();
+    var colV = hold === 'ic' ? 'Sell Price' : 'IC Pay';
+    var colD = hold === 'ic' ? 'Price Change' : 'Pay Change';
+    document.getElementById('ladder-help').textContent = a === null
+        ? (hold === 'ic' ? 'Enter the IC pay to see the sell price at every margin.' : 'Enter the sell price to see the IC pay at every margin.')
+        : (hold === 'ic' ? 'IC pay stays at ' + fmt$(a) + '. Each row is the sell price at that margin.' : 'Sell price stays at ' + fmt$(a) + '. Each row is the IC pay at that margin.');
+
+    var rows = [];
+    for (var i = LADDER_MIN; i <= LADDER_MAX; i++) rows.push(i);
+    var curM = m !== null ? Math.round(m * 100) / 100 : null;
+    if (curM !== null && curM > 0 && curM < 100 && rows.indexOf(curM) < 0) {
+        rows.push(curM); rows.sort(function(x, y){ return x - y; });
+    }
+    var curFig = curM !== null ? figureAt(curM) : null;
+
+    var html = '<div class="lgrid lcols"><span>Margin</span><span>Pay %</span><span>' + colV + '</span><span>' + colD + '</span></div>';
+    var lastTier = null;
+    rows.forEach(function(r){
+        var t = tierFor(r);
+        if (t !== lastTier) {
+            html += '<div class="lhead ' + t.cls + '"><b>' + t.action.replace(' required','') + '</b><span>' + t.range + '</span></div>';
+            lastTier = t;
+        }
+        var isCur = curM !== null && r === curM;
+        var f = figureAt(r);
+        var d = (f !== null && curFig !== null) ? (isCur ? '<span class="now-tag">NOW</span>' : fmtDelta(f - curFig)) : '--';
+        html += '<div class="lgrid lrow ' + t.cls + (isCur ? ' cur' : '') + '" role="button" tabindex="0" data-m="' + r + '"' +
+                ' aria-label="Set margin to ' + r + ' percent">' +
+                '<span>' + trimNum(r) + '%</span>' +
+                '<span>' + trimNum(100 - r) + '%</span>' +
+                '<span class="c-v">' + (f !== null ? fmt$(f) : '--') + '</span>' +
+                '<span class="c-d">' + (isCur && d === '--' ? '<span class="now-tag">NOW</span>' : d) + '</span></div>';
+    });
+    document.getElementById('ladder').innerHTML = html;
+}
+
+// ================= RENDER: gauge + barometer =================
 function renderGauge(b, m) {
     var pct = function(x){ return Math.max(0, Math.min(100, x / GAUGE_MAX * 100)); };
     document.getElementById('zone-low').style.width = pct(b.min) + '%';
@@ -606,20 +918,17 @@ function renderGauge(b, m) {
     document.getElementById('gauge-target').style.left = pct(b.target) + '%';
 
     var labels = document.getElementById('gauge-labels');
-    var minDrop = (b.target - b.min) <= 6 ? ' class="drop"' : '';
-    var maxDrop = (b.max - b.target) <= 6 ? ' class="drop"' : '';
+    var gap = window.innerWidth < 640 ? 12 : 6;
+    var minDrop = (b.target - b.min) <= gap ? ' class="drop"' : '';
+    var maxDrop = (b.max - b.target) <= gap ? ' class="drop"' : '';
     labels.innerHTML =
         '<span' + minDrop + ' style="left:' + pct(b.min) + '%">min ' + b.min + '%</span>' +
         '<span style="left:' + pct(b.target) + '%;font-weight:700;color:var(--cw-black);">target ' + b.target + '%</span>' +
         '<span' + maxDrop + ' style="left:' + pct(b.max) + '%">max ' + b.max + '%</span>';
 
     var needle = document.getElementById('gauge-needle');
-    if (m !== null && m > 0) {
-        needle.style.display = 'block';
-        needle.style.left = pct(m) + '%';
-    } else {
-        needle.style.display = 'none';
-    }
+    if (m !== null && m > 0) { needle.style.display = 'block'; needle.style.left = pct(m) + '%'; }
+    else { needle.style.display = 'none'; }
 }
 
 function renderStatus(b, m, cost) {
@@ -634,11 +943,10 @@ function renderStatus(b, m, cost) {
     document.getElementById('target-pt').textContent = b.target + '%';
     document.getElementById('baro-sub').textContent = 'fair range for ' + svc.toLowerCase() + ' in ' + reg + (b.sizeNote ? ' (' + b.sizeNote + ')' : '');
 
-    // Fair customer price range in dollars, when we know vendor cost
     var priceLine = document.getElementById('fair-price-line');
     if (cost !== null && cost > 0) {
         var lo = cost / (1 - b.min/100), tp = cost / (1 - b.target/100), hi = cost / (1 - b.max/100);
-        priceLine.innerHTML = 'Fair customer price on this cost: <strong>' + fmt$(lo) + ' to ' + fmt$(hi) + '</strong> (target ' + fmt$(tp) + ')';
+        priceLine.innerHTML = 'Fair sell price on this IC pay: <strong>' + fmt$(lo) + ' to ' + fmt$(hi) + '</strong> (target ' + fmt$(tp) + ')';
     } else {
         priceLine.textContent = '';
     }
@@ -651,27 +959,27 @@ function renderStatus(b, m, cost) {
         return;
     }
 
-    var status, cls, position, action, message;
+    var status, cls, position, action, message, mm = trimNum(m);
     if (m >= b.max) {
         cls = 'high'; status = 'Above Fair Range';
         position = 'Premium'; action = 'Consider Reducing';
-        message = 'A ' + m.toFixed(1) + '% margin prices this above the fair range for ' + svc.toLowerCase() + ' in ' + reg + '. You are exposed if the customer shops the work. Consider landing between ' + b.target + '% and ' + b.max + '%.';
+        message = 'A ' + mm + '% margin prices this above the fair range for ' + svc.toLowerCase() + ' in ' + reg + '. You are exposed if the customer shops the work. Consider landing between ' + b.target + '% and ' + b.max + '%.';
     } else if (m >= b.target) {
         cls = 'ok'; status = 'Inside Fair Range';
         position = 'Competitive'; action = 'Maintain';
-        message = 'A ' + m.toFixed(1) + '% margin sits in the sweet spot for ' + svc.toLowerCase() + ' in ' + reg + ': fair to the customer and strong for the branch. Hold here.';
+        message = 'A ' + mm + '% margin sits in the sweet spot for ' + svc.toLowerCase() + ' in ' + reg + '. Fair to the customer and strong for the branch. Hold here.';
     } else if (m >= b.min) {
         cls = 'ok'; status = 'Inside Fair Range (Low Side)';
         position = 'Competitive'; action = 'Consider Increase';
-        message = 'A ' + m.toFixed(1) + '% margin is fair but below the ' + b.target + '% target for ' + svc.toLowerCase() + ' in ' + reg + '. If the relationship and scope allow, move toward target. You are leaving money on the table.';
+        message = 'A ' + mm + '% margin is fair but below the ' + b.target + '% target for ' + svc.toLowerCase() + ' in ' + reg + '. If the relationship and scope allow, move toward target. You are leaving money on the table.';
     } else if (m >= FLOOR) {
         cls = 'low'; status = 'Below Fair Range';
         position = 'Aggressive'; action = 'Increase Recommended';
-        message = 'A ' + m.toFixed(1) + '% margin is under the ' + b.min + '% fair-range floor for ' + svc.toLowerCase() + ' in ' + reg + '. Low margins should be a strategic choice on big work, not a habit. Get above ' + b.min + '% or get a reason in writing.';
+        message = 'A ' + mm + '% margin is under the ' + b.min + '% fair-range floor for ' + svc.toLowerCase() + ' in ' + reg + '. Low margins should be a strategic choice on big work, not a habit. Get above ' + b.min + '% or get a reason in writing.';
     } else {
         cls = 'low'; status = 'Below Company Minimum';
         position = 'Unsustainable'; action = 'Urgent Review';
-        message = 'A ' + m.toFixed(1) + '% margin is below the City Wide floor of ' + FLOOR + '%. This job loses money once management time and risk are priced in. Rework the vendor cost or the customer price before quoting.';
+        message = 'A ' + mm + '% margin is below the City Wide floor of ' + FLOOR + '%. This job loses money once management time and risk are priced in. Rework the IC pay or the sell price before quoting.';
     }
 
     pill.className = 'status-pill ' + cls;
@@ -683,8 +991,7 @@ function renderStatus(b, m, cost) {
 
 function renderMetrics() {
     var cost = val('vendor-cost') || 0, price = val('customer-price') || 0, m = val('margin-rate') || 0;
-    var gross = price - cost;
-    document.getElementById('gross-profit').textContent = fmt$(gross);
+    document.getElementById('gross-profit').textContent = fmt$(price - cost);
     document.getElementById('markup-percent').textContent = (cost > 0 ? ((price - cost) / cost) * 100 : 0).toFixed(1) + '%';
     document.getElementById('profit-per-hundred').textContent = '$' + m.toFixed(2);
     document.getElementById('multiplier').textContent = (cost > 0 ? price / cost : 1).toFixed(2) + 'x';
@@ -694,8 +1001,12 @@ function recalc() {
     solve();
     var b = currentBand();
     var m = val('margin-rate');
+    var s = document.getElementById('margin-slider');
+    if (m !== null && document.activeElement !== s) s.value = Math.max(20, Math.min(60, m));
     renderGauge(b, m);
     renderStatus(b, m, val('vendor-cost'));
+    renderApproval(m);
+    renderLadder(m);
     renderMetrics();
 }
 
@@ -707,6 +1018,21 @@ function setRegion(r) {
     recalc();
 }
 
+// Ladder taps (one listener for every row)
+document.addEventListener('click', function(e){
+    var row = e.target.closest && e.target.closest('.lrow');
+    if (row) setMargin(parseFloat(row.getAttribute('data-m')));
+});
+document.addEventListener('keydown', function(e){
+    var row = e.target.closest && e.target.closest('.lrow');
+    if (row && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        var m = row.getAttribute('data-m');
+        setMargin(parseFloat(m));
+        var again = document.querySelector('.lrow[data-m="' + m + '"]'); if (again) again.focus();
+    }
+});
+
 // ================= EXPORT / RESET =================
 function exportToCSV() {
     var b = currentBand();
@@ -714,21 +1040,26 @@ function exportToCSV() {
     var svc = svcSel.value ? svcSel.options[svcSel.selectedIndex].text : 'Not specified';
     var size = document.getElementById('project-size').value;
     var cost = document.getElementById('vendor-cost').value || '0';
+    var mv = val('margin-rate');
     var m = document.getElementById('margin-rate').value || '0';
     var price = document.getElementById('customer-price').value || '0';
+    var t = mv !== null ? tierFor(mv) : null;
 
     var csv = 'City Wide Margin Calculator Export\n';
-    csv += 'Generated on,' + new Date().toLocaleString() + '\n\n';
+    csv += 'Generated on,' + new Date().toLocaleString().replace(/,/g, '') + '\n\n';
     csv += 'MARKET\n';
     csv += 'Region,' + regionLabel() + '\n';
     csv += 'Service Type,' + svc.replace(/,/g, ' ') + '\n';
     csv += 'Project Size,' + size + '\n\n';
     csv += 'PRIMARY VALUES\n';
-    csv += 'City Wide Cost to Vendor,$' + cost + '\n';
-    csv += 'Margin Rate,' + m + '%\n';
-    csv += 'City Wide Price to Customer,$' + price + '\n\n';
+    csv += 'IC Pay,$' + cost + '\n';
+    csv += 'Margin,' + m + '%\n';
+    csv += 'Sell Price,$' + price + '\n\n';
+    csv += 'APPROVAL\n';
+    csv += 'Approval Level,' + (t ? t.action.replace(/&/g, 'and') : '') + '\n';
+    csv += 'Tier,' + (t ? t.range.replace(/&/g, 'and') : '') + '\n\n';
     csv += 'CALCULATED METRICS\n';
-    csv += 'Gross Profit,' + document.getElementById('gross-profit').textContent + '\n';
+    csv += 'Gross Profit,' + document.getElementById('gross-profit').textContent.replace(/,/g, '') + '\n';
     csv += 'Markup on Cost,' + document.getElementById('markup-percent').textContent + '\n\n';
     csv += 'BAROMETER\n';
     csv += 'Fair Margin Range,' + b.min + '-' + b.max + '%\n';
@@ -736,19 +1067,29 @@ function exportToCSV() {
     csv += 'Status,' + document.getElementById('status-pill').textContent + '\n';
     csv += 'Market Position,' + document.getElementById('market-position').textContent + '\n';
     csv += 'Recommended Action,' + document.getElementById('recommended-action').textContent + '\n\n';
+
+    var a = anchor();
+    if (a !== null) {
+        csv += 'MARGIN LADDER (' + (hold === 'ic' ? 'IC pay fixed at ' : 'Sell price fixed at ') + fmt$(a).replace(/,/g, '') + ')\n';
+        csv += 'Margin,IC Pay %,' + (hold === 'ic' ? 'Sell Price' : 'IC Pay') + ',Approval\n';
+        for (var i = LADDER_MIN; i <= LADDER_MAX; i++) {
+            csv += i + '%,' + (100 - i) + '%,' + figureAt(i).toFixed(2) + ',' + tierFor(i).action.replace(/&/g, 'and') + '\n';
+        }
+        csv += '\n';
+    }
+
     csv += 'CITY WIDE GUIDELINES\n';
-    csv += 'Standard Target Range,32-40%\n';
-    csv += 'Other Service Projects Target,40%\n';
-    csv += 'Large Project Range (over $10k),20-30%\n';
+    csv += 'Under 30%,DOO and GM approval\n';
+    csv += '30% to 34%,DOO approval\n';
     csv += 'Minimum Acceptable Margin,' + FLOOR + '%\n';
-    csv += 'Northern Nevada Adjustment,+' + NNV_SHIFT + ' pts\n';
+    csv += 'Northern Nevada fair range adjustment,+' + NNV_SHIFT + ' pts\n';
 
     var blob = new Blob([csv], { type: 'text/csv' });
     var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'citywide_margin_' + new Date().toISOString().split('T')[0] + '.csv';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'citywide_margin_' + new Date().toISOString().split('T')[0] + '.csv';
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
 }
 
@@ -759,6 +1100,7 @@ function resetCalculator() {
     document.getElementById('customer-price').value = '';
     document.getElementById('margin-rate').value = '40';
     editOrder = ['margin'];
+    setHoldUI('ic');
     setRegion('lv');
 }
 
@@ -769,9 +1111,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- CW Save Results to Google Sheets -->
-<div id="cwSaveBar" style="position:fixed;bottom:18px;right:18px;z-index:9999;font-family:Verdana,'Liberation Sans','DejaVu Sans',Geneva,Tahoma,sans-serif;">
-<button id="cwSaveBtn" type="button" style="background:#D22730;color:#FFFFFF;border:none;border-radius:6px;padding:12px 20px;font-size:13px;font-weight:bold;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);">Save Results</button>
-</div>
 <script>
 (function(){
   var CW_TOOL='margincalculator';
@@ -793,7 +1132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var inputs=[];
     document.querySelectorAll('input,select,textarea').forEach(function(el){
       if(!vis(el))return;
-      if(el.closest('#cwSaveBar'))return;
+      if(el.closest('#cwSaveBar')||el.closest('[data-nosave]'))return;
       if(el.type==='button'||el.type==='submit'||el.type==='hidden')return;
       var v;
       if(el.type==='checkbox'){v=el.checked?'Yes':'No';}
@@ -804,12 +1143,13 @@ document.addEventListener('DOMContentLoaded', function() {
       inputs.push([labelFor(el),String(v)]);
     });
     inputs.push(['Region', region==='nnv'?'Northern Nevada':'Las Vegas']);
+    var mv=val('margin-rate'); if(mv!==null){var t=tierFor(mv);inputs.push(['Approval',t.action+' ('+t.range+')']);}
     var results=[],seenR={};
     document.querySelectorAll('.result-card,.result-box').forEach(function(card){
       if(!vis(card))return;
       var lab=card.querySelector('.result-label,h3,h4,.label')||null;
-      var val=card.querySelector('.result-value,.value')||null;
-      var L=lab?txt(lab):'',V=val?txt(val):'';
+      var val2=card.querySelector('.result-value,.value')||null;
+      var L=lab?txt(lab):'',V=val2?txt(val2):'';
       var unit=card.querySelector('.result-unit');if(unit&&V)V+=' '+txt(unit);
       if(!V){var t=txt(card);if(L)t=t.replace(L,'').trim();V=t;}
       if(!L&&!V)return;
@@ -820,7 +1160,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('body *').forEach(function(el){
       if(el.children.length>0)return;
       if(!vis(el))return;
-      if(el.closest('#cwSaveBar'))return;
+      if(el.closest('#cwSaveBar')||el.closest('[data-nosave]'))return;
       if(el.closest('.result-card')||el.closest('.result-box'))return;
       if(/^(INPUT|SELECT|TEXTAREA|OPTION|SCRIPT|STYLE|BUTTON|LABEL|A|TITLE)$/.test(el.tagName))return;
       var t=txt(el);
@@ -846,7 +1186,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var payload=JSON.stringify(collect());
     fetch(CW_HOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:payload})
       .then(function(){btn.textContent='Saved to Google Sheets';btn.style.background='#0AA6A9';
-        setTimeout(function(){btn.textContent='Save Results';btn.style.background='#D22730';btn.disabled=false;},4000);})
+        setTimeout(function(){btn.textContent='Save Results';btn.style.background='';btn.disabled=false;},4000);})
       .catch(function(){btn.textContent='Save failed, retry';btn.style.background='#2D2A26';btn.disabled=false;});
   });
 })();
